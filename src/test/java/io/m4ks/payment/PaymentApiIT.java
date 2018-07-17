@@ -2,13 +2,20 @@ package io.m4ks.payment;
 
 import com.github.geowarin.junit.DockerRule;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.*;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
-public class SampleIT  {
+import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
+
+public class PaymentApiIT {
 
     @ClassRule
     public static DockerRule dockerRule =
@@ -26,9 +33,17 @@ public class SampleIT  {
     }
 
     @Test
-    public void testHttp() {
+    public void testBasicCreation() throws IOException {
 
-        get("/").getBody().print();
+        given().
+            contentType(ContentType.JSON).
+            body(IOUtils.toString(getClass().getResourceAsStream("/payment-1.json"), Charset.forName("UTF-8"))).
+        when().
+            post("/payment").
+        then().
+            statusCode(201). //created
+                and()
+                .body("data.id", not(isEmptyOrNullString()));
     }
 
 }
