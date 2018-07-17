@@ -7,6 +7,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'se.transmode.gradle:gradle-docker:1.2'
 	}
 }
 
@@ -14,6 +15,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'docker'
 
 group = 'io.m4ks'
 version = '0.0.1-SNAPSHOT'
@@ -21,8 +23,8 @@ sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
-
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
@@ -34,9 +36,50 @@ dependencies {
 	compile('org.liquibase:liquibase-core')
 	runtime('mysql:mysql-connector-java')
 	compileOnly('org.projectlombok:lombok')
+	compile group: 'com.h2database', name: 'h2', version: '1.4.197'
+
+	//for JDK 8+ compatibility
+	compile group: 'javax.xml.bind', name: 'jaxb-api', version: dependencyManagement.importedProperties['javax-jaxb.version']
+//	compile group: 'org.glassfish.jersey.ext', name: 'jersey-spring5'
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 
-	testCompile group: 'com.consol.citrus', name: 'citrus-core', version: '2.7.6'
-	testCompile group: 'com.consol.citrus', name: 'citrus-java-dsl', version: '2.7.6'
+
+	// Spring Gradle plugin introduces it's own dependency management. This artifact relies on older version of
+    // jersey-connector, but it's not bumped by Spring Plugin, while the other Jersey components are
+    // so there is an JAR version-incompatibility created. Excluding it and manully adding with a proper version
+    // does the job.
+	testCompile("com.github.geowarin:docker-junit-rule:1.2.0") {
+		exclude group: "org.glassfish.jersey.connectors", module: "jersey-apache-connector"
+		exclude group: "com.spotify", module: "docker-client"
+	}
+	testCompile "org.glassfish.jersey.connectors:jersey-apache-connector:${dependencyManagement.importedProperties['jersey.version']}"
+	// Never version of Jersey does not include HK2 API used in Docker plugin
+	testCompile group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: dependencyManagement.importedProperties['jersey.version']
+
+	// Older versions of Spotify Client won't work with newer (2.9+) Jackson versions.
+	// 2.8 of Jackson serializes null map values, while 2.9 omits them.
+	testCompile group: "com.spotify", name: "docker-client", version: "8.11.7"
+
+
+	// JDK 10+ compatibility
+	testCompile 'javax.activation:activation:1.1'
+
+	testCompile 'io.rest-assured:rest-assured:3.1.0'
+
+}
+
+docker {
+	baseImage "openjdk:10-jre-slim"
+}
+
+task paymentDocker(type: Docker, dependsOn: "bootJar") {
+	applicationName = "payment"
+
+	addFile bootJar.archivePath, bootJar.archiveName
+	entryPoint(["java",  "-jar", bootJar.archiveName])
+	exposePort 8080
+	tagVersion "latest"
+	tag = "m4ks/payment"
 }
