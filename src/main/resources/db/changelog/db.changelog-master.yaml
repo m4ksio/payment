@@ -4,45 +4,28 @@ databaseChangeLog:
       author: m4ks
       changes:
         - createTable:
-            tableName: person
+            tableName: payment_resource
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: char(32)
+                  autoIncrement: false
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: firstname
-                  type: varchar(50)
-              - column:
-                  name: lastname
+                  name: organization_id
                   type: varchar(50)
                   constraints:
                     nullable: false
               - column:
-                  name: state
-                  type: char(2)
-
-  - changeSet:
-      id: 2
-      author: nvoxland
-      changes:
-        - addColumn:
-            tableName: person
-            columns:
+                  name: version
+                  type: int
+                  constraints:
+                    nullable: false
               - column:
-                  name: username
-                  type: varchar(8)
+                  name: amount
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
 
-  - changeSet:
-      id: 3
-      author: nvoxland
-      changes:
-        - addLookupTable:
-            existingTableName: person
-            existingColumnName: state
-            newTableName: state
-            newColumnName: id
-            newColumnDataType: char(2)

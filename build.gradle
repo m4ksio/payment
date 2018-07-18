@@ -4,10 +4,14 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath 'se.transmode.gradle:gradle-docker:1.2'
+		classpath "io.franzbecker:gradle-lombok:1.14"
 	}
 }
 
@@ -16,6 +20,12 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
+apply plugin: "io.franzbecker.gradle-lombok"
+
+lombok {
+	version = "1.18.0"
+	sha256 = ""
+}
 
 group = 'io.m4ks'
 version = '0.0.1-SNAPSHOT'
@@ -26,16 +36,18 @@ repositories {
 	jcenter()
 }
 
+
+
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-data-rest')
+//	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-integration')
 	compile('org.springframework.boot:spring-boot-starter-jooq')
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.liquibase:liquibase-core')
 	runtime('mysql:mysql-connector-java')
-	compileOnly('org.projectlombok:lombok')
+//	compileOnly('org.projectlombok:lombok')
 	compile group: 'com.h2database', name: 'h2', version: '1.4.197'
 
 	//for JDK 8+ compatibility
