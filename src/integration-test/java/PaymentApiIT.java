@@ -53,7 +53,7 @@ public class PaymentApiIT {
                 then().
                     statusCode(201). /*created*/ and().
                     body("data", not(Matchers.isEmptyOrNullString())).and().
-                    body("links.self", not(Matchers.isEmptyOrNullString())).
+                    body("links.get", not(Matchers.isEmptyOrNullString())).
                 extract().
                     response();
 
@@ -88,7 +88,7 @@ public class PaymentApiIT {
                 then().
                     statusCode(201). /*created*/ and().
                     body("data", not(Matchers.isEmptyOrNullString())).and().
-                    body("links.self", not(Matchers.isEmptyOrNullString())).
+                    body("links.get", not(Matchers.isEmptyOrNullString())).
                 extract().
                     response();
 

@@ -1,6 +1,5 @@
 package io.m4ks.payment.model;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 

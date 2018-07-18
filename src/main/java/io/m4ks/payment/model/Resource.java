@@ -1,6 +1,7 @@
 package io.m4ks.payment.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public abstract class Resource<T> {
 
     @Id
@@ -32,41 +34,8 @@ public abstract class Resource<T> {
 
     @Column(nullable = false)
     @NotNull
-    @JsonProperty("organisation_id")
     private String organisationId;
 
     @Embedded
     private T attributes;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    public String getOrganisationId() {
-        return organisationId;
-    }
-
-    public void setOrganisationId(String organization_id) {
-        this.organisationId = organization_id;
-    }
-
-    public T getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(T attributes) {
-        this.attributes = attributes;
-    }
 }

@@ -28,4 +28,206 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
-
+              - column:
+                  name: currency
+                  type: char(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_account_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_account_number
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_account_number_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_account_type
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_address
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_bank_id
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_bank_id_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: beneficiary_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bearer_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: receiver_charges_amount
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: receiver_charges_currency
+                  type: char(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_account_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_account_number
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_account_number_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_account_type
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_address
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_bank_id
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_bank_id_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debtor_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_to_end_reference
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contract_reference
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: exchange_rate
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: original_amount
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: original_currency
+                  type: char(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: numeric_reference
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_id
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_purpose
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_scheme
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: processing_date
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reference
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: scheme_payment_sub_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: scheme_payment_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_number
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bank_id
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bank_id_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: sender_charges
+            columns:
+              - column:
+                  name: payment_id
+                  type: char(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: char(3)
+                  constraints:
+                    nullable: false

@@ -2,7 +2,7 @@ package io.m4ks.payment;
 
 import com.google.common.collect.ImmutableList;
 import io.m4ks.payment.controllers.PaymentsController;
-import io.m4ks.payment.controllers.PersonRepository;
+import io.m4ks.payment.controllers.PaymentsRepository;
 import io.m4ks.payment.model.PaymentResource;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -34,7 +34,7 @@ public class PaymentApiLinksTests {
     private MockMvc mvc;
 
     @MockBean
-    private PersonRepository personRepository;
+    private PaymentsRepository paymentsRepository;
     private UUID randomUUID;
 
     @Before
@@ -44,9 +44,9 @@ public class PaymentApiLinksTests {
         PaymentResource paymentResource = new PaymentResource();
         paymentResource.setId(randomUUID);
 
-        given(personRepository.findById(any())).willReturn(Optional.of(paymentResource));
-        given(personRepository.findAll()).willReturn(ImmutableList.of(paymentResource));
-        given(personRepository.save(any())).willReturn(paymentResource);
+        given(paymentsRepository.findById(any())).willReturn(Optional.of(paymentResource));
+        given(paymentsRepository.findAll()).willReturn(ImmutableList.of(paymentResource));
+        given(paymentsRepository.save(any())).willReturn(paymentResource);
     }
 
 	@Test
