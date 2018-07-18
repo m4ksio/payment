@@ -1,11 +1,13 @@
 package io.m4ks.payment.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -29,7 +31,9 @@ public abstract class Resource<T> {
     private int version;
 
     @Column(nullable = false)
-    private String organization_id;
+    @NotNull
+    @JsonProperty("organisation_id")
+    private String organisationId;
 
     @Embedded
     private T attributes;
@@ -50,12 +54,12 @@ public abstract class Resource<T> {
         this.version = version;
     }
 
-    public String getOrganization_id() {
-        return organization_id;
+    public String getOrganisationId() {
+        return organisationId;
     }
 
-    public void setOrganization_id(String organization_id) {
-        this.organization_id = organization_id;
+    public void setOrganisationId(String organization_id) {
+        this.organisationId = organization_id;
     }
 
     public T getAttributes() {

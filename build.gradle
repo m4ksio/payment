@@ -50,6 +50,8 @@ dependencies {
 //	compileOnly('org.projectlombok:lombok')
 	compile group: 'com.h2database', name: 'h2', version: '1.4.197'
 
+	compile 'com.google.guava:guava:25.1-jre'
+
 	//for JDK 8+ compatibility
 	compile group: 'javax.xml.bind', name: 'jaxb-api', version: dependencyManagement.importedProperties['javax-jaxb.version']
 //	compile group: 'org.glassfish.jersey.ext', name: 'jersey-spring5'
@@ -76,6 +78,7 @@ dependencies {
 	// 2.8 of Jackson serializes null map values, while 2.9 omits them.
 	testCompile group: "com.spotify", name: "docker-client", version: "8.11.7"
 
+//	testCompile("org.assertj:assertj-core:3.10.0")
 
 	// JDK 10+ compatibility
 	testCompile 'javax.activation:activation:1.1'
