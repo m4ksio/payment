@@ -31,60 +31,60 @@ group = 'io.m4ks'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/integration-test/java')
+		}
+		resources.srcDir file('src/integration-test/resources')
+	}
+}
+
+configurations {
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
 repositories {
 	mavenCentral()
 	jcenter()
 }
 
-
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-//	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-integration')
-	compile('org.springframework.boot:spring-boot-starter-jooq')
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.liquibase:liquibase-core')
-	runtime('mysql:mysql-connector-java')
-//	compileOnly('org.projectlombok:lombok')
+	compileOnly('org.projectlombok:lombok')
 	compile group: 'com.h2database', name: 'h2', version: '1.4.197'
-
 	compile 'com.google.guava:guava:25.1-jre'
-
-	//for JDK 8+ compatibility
-	compile group: 'javax.xml.bind', name: 'jaxb-api', version: dependencyManagement.importedProperties['javax-jaxb.version']
-//	compile group: 'org.glassfish.jersey.ext', name: 'jersey-spring5'
-
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 
+	//for JDK 10+ compatibility
+	compile group: 'javax.xml.bind', name: 'jaxb-api', version: dependencyManagement.importedProperties['javax-jaxb.version']
+	testCompile 'javax.activation:activation:1.1'
 
+	integrationTestCompile 'io.rest-assured:rest-assured:3.1.0'
 	// Spring Gradle plugin introduces it's own dependency management. This artifact relies on older version of
     // jersey-connector, but it's not bumped by Spring Plugin, while the other Jersey components are
     // so there is an JAR version-incompatibility created. Excluding it and manully adding with a proper version
     // does the job.
-	testCompile("com.github.geowarin:docker-junit-rule:1.2.0") {
+	integrationTestCompile("com.github.geowarin:docker-junit-rule:1.2.0") {
 		exclude group: "org.glassfish.jersey.connectors", module: "jersey-apache-connector"
 		exclude group: "com.spotify", module: "docker-client"
 	}
-	testCompile "org.glassfish.jersey.connectors:jersey-apache-connector:${dependencyManagement.importedProperties['jersey.version']}"
+	integrationTestCompile "org.glassfish.jersey.connectors:jersey-apache-connector:${dependencyManagement.importedProperties['jersey.version']}"
 	// Never version of Jersey does not include HK2 API used in Docker plugin
-	testCompile group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: dependencyManagement.importedProperties['jersey.version']
+	integrationTestCompile group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: dependencyManagement.importedProperties['jersey.version']
 
 	// Older versions of Spotify Client won't work with newer (2.9+) Jackson versions.
 	// 2.8 of Jackson serializes null map values, while 2.9 omits them.
-	testCompile group: "com.spotify", name: "docker-client", version: "8.11.7"
-
-//	testCompile("org.assertj:assertj-core:3.10.0")
-
-	// JDK 10+ compatibility
-	testCompile 'javax.activation:activation:1.1'
-
-	testCompile 'io.rest-assured:rest-assured:3.1.0'
-
+	integrationTestCompile group: "com.spotify", name: "docker-client", version: "8.11.7"
 }
 
 docker {
@@ -99,4 +99,9 @@ task paymentDocker(type: Docker, dependsOn: "bootJar") {
 	exposePort 8080
 	tagVersion "latest"
 	tag = "m4ks/payment"
+}
+
+task integrationTest(type: Test, dependsOn: "paymentDocker") {
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
 }
